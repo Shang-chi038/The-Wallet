@@ -1,0 +1,118 @@
+/**
+ * Fonts are SELF-HOSTED, never fetched from Google Fonts.
+ *
+ * Two reasons, both mandatory for an extension:
+ *   PRIVACY  — a remote font request tells a third party every time the user
+ *              opens their wallet, from their IP. Unacceptable in a wallet.
+ *   CSP      — MV3 extension pages must not depend on remote resources; the
+ *              popup has to render identically offline.
+ *
+ * @fontsource bundles the font files into the build, so the design ships intact
+ * with no network dependency at all.
+ *
+ * LATIN SUBSET ONLY. The default @fontsource entrypoints ship Latin, Latin-Ext,
+ * Greek, Greek-Ext, Cyrillic, Cyrillic-Ext and Vietnamese — 50 files and ~848KB
+ * for a UI that renders currency figures and English labels. The `latin-*`
+ * entrypoints cut that to the subset we actually render.
+ *
+ * If the UI is ever localised, add the matching subset import here rather than
+ * reverting to the full entrypoint: a wallet popup should not carry Vietnamese
+ * glyph coverage in order to display "Send".
+ */
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/playfair-display/latin-500.css";
+@import "tailwindcss";
+
+/**
+ * Design tokens, adopted from the WalletNest screens spec.
+ *
+ * Both themes ship together and every colour is a token from commit one — per
+ * the spec's own instruction. Nothing hardcodes a hex outside this file.
+ */
+
+@theme {
+  /* Surfaces */
+  --color-bg: #FBFAF9;
+  --color-card: #FFFFFF;
+  --color-muted: #F2F0EC;
+  --color-line: #E1E7EF;
+
+  /* Text */
+  --color-ink: #0F1729;
+  --color-slate: #65758B;
+  --color-faint: #9AA6B8;
+
+  /* Intent */
+  --color-danger: #EF4343;
+  --color-positive: #12A150;
+  --color-btn-bg: #0F1729;
+  --color-btn-fg: #FBFAF9;
+
+  /* Asset identity. Used ONLY for avatars, the proportion bar and chart lines —
+     never for buttons, labels or body text. */
+  --color-asset-btc: #F7931A;
+  --color-asset-usdt: #26A17B;
+  --color-asset-usdc: #2775CA;
+  --color-asset-eth: #454A75;
+  --color-asset-other: #8C9AAD;
+
+  /* Type. Serif for numerals and headings, sans for everything else. */
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: Inter, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Shape */
+  --radius-card: 12px;
+  --radius-field: 4px;
+  --radius-pill: 9999px;
+}
+
+.dark {
+  --color-bg: #0F1729;
+  --color-card: #16203A;
+  --color-muted: #1B2540;
+  --color-line: #222E4A;
+  --color-ink: #F4F6FA;
+  --color-slate: #93A1B8;
+  --color-faint: #65758B;
+  --color-danger: #F0716F;
+  --color-positive: #3FBF6E;
+  --color-btn-bg: #F4F6FA;
+  --color-btn-fg: #0F1729;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --color-bg: #0F1729;
+    --color-card: #16203A;
+    --color-muted: #1B2540;
+    --color-line: #222E4A;
+    --color-ink: #F4F6FA;
+    --color-slate: #93A1B8;
+    --color-faint: #65758B;
+    --color-danger: #F0716F;
+    --color-positive: #3FBF6E;
+    --color-btn-bg: #F4F6FA;
+    --color-btn-fg: #0F1729;
+  }
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/**
+ * Tabular numerals everywhere a figure appears. Without this, proportional
+ * digits make a balance jitter horizontally as it updates, which reads as
+ * instability in the one number users watch most closely.
+ */
+.numeric {
+  font-variant-numeric: tabular-nums;
+}

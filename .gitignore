@@ -1,0 +1,15 @@
+.env.local
+.env
+*.pem
+node_modules/
+dist*
+.env.local
+!.env.example
+
+# My personal files
+frank*
+graphify-out
+CoinGecko*
+CLAUDE*
+claude*
+screen*
